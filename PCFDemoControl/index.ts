@@ -2,6 +2,15 @@ import {IInputs, IOutputs} from "./generated/ManifestTypes";
 
 export class PCFDemoControl implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
+    // value of the fiedl stored in control
+    private _textBoxValue: string; 
+
+    // reference ComponentFramework Context object
+    private _context: ComponentFramework.Context<IInputs>;
+
+    // this element contains all elements of custom control
+    private _container: HTMLDivElement;
+
 	/**
 	 * Empty constructor.
 	 */
@@ -21,6 +30,17 @@ export class PCFDemoControl implements ComponentFramework.StandardControl<IInput
 	public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement)
 	{
 		// Add control initialization code
+
+        this._context = context;
+        this._container = document.createElement("div");
+
+        // this is the way of accessing to property programatically in runtime
+        // Property is defined in Manifest xml file
+        this._textBoxValue = context.parameters.sampleProperty.raw;
+
+        this._container.innerText = this._textBoxValue;
+
+        container.appendChild(this._container);
 	}
 
 
@@ -31,6 +51,10 @@ export class PCFDemoControl implements ComponentFramework.StandardControl<IInput
 	public updateView(context: ComponentFramework.Context<IInputs>): void
 	{
 		// Add code to update control view
+
+        this._textBoxValue = context.parameters.sampleProperty.raw;
+        this._context = context;
+        this._container.innerText = this._textBoxValue;        
 	}
 
 	/** 
